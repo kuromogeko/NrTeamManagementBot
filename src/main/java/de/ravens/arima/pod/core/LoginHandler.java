@@ -5,7 +5,7 @@ import discord4j.core.GatewayDiscordClient;
 import reactor.core.publisher.Mono;
 
 public class LoginHandler {
-    public static Mono<GatewayDiscordClient> login(DiscordClient client){
+    public static Mono<GatewayDiscordClient> login(DiscordClient client) {
         return client.login();
     }
 }
