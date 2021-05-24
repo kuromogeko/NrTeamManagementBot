@@ -21,7 +21,7 @@ import static de.ravens.arima.pod.commands.user.command.JoinTeamRequestCommand.W
 public class AcceptTeamRequestCommand implements EventListener<ReactionAddEvent> {
 
 
-    private static boolean messageSentByMe(FlowObject object) {
+    static boolean messageSentByMe(FlowObject object) {
         var message = object.getMessage();
         return message.getAuthorAsMember()
                 .map(User::getId)
@@ -30,7 +30,7 @@ public class AcceptTeamRequestCommand implements EventListener<ReactionAddEvent>
                 .orElse(false);
     }
 
-    private static boolean isTeamInvitation(FlowObject flow) {
+    static boolean isTeamInvitation(FlowObject flow) {
         return flow.getMessage()
                 .getEmbeds()
                 .stream()
@@ -51,17 +51,17 @@ public class AcceptTeamRequestCommand implements EventListener<ReactionAddEvent>
     public Mono<Void> execute(ReactionAddEvent event) {
         return Mono.just(event)
                 .filter(this::getMessageWasHappyEmojiPredicate)
-                .flatMap(this::addMessageToContext)
+                .flatMap(AcceptTeamRequestCommand::addMessageToContext)
                 .filter(AcceptTeamRequestCommand::isTeamInvitation)
                 .filter(AcceptTeamRequestCommand::messageSentByMe)
-                .filter(this::getReactionWasByMentionedUserPredicate)
-                .flatMap(this::addUserToContext)
+                .filter(AcceptTeamRequestCommand::getReactionWasByMentionedUserPredicate)
+                .flatMap(AcceptTeamRequestCommand::addUserToContext)
                 .flatMap(this::addRoleToUserAndReturn)
                 .flatMap(this::editOldMessage)
                 .then();
     }
 
-    private Mono<FlowObject> addMessageToContext(ReactionAddEvent reactionAddEvent) {
+    static Mono<FlowObject> addMessageToContext(ReactionAddEvent reactionAddEvent) {
         return reactionAddEvent.getMessage()
                 .map(message -> FlowObject.builder()
                         .message(message)
@@ -91,13 +91,13 @@ public class AcceptTeamRequestCommand implements EventListener<ReactionAddEvent>
 
         objects.setAdditionalMessage("");
 
-        return objects.getMember().addRole(roleFlake).doOnError(throwable -> {
-            objects.setAdditionalMessage("Error setting team role, please contact a Mod to do so. ");
-        }).thenReturn(objects);
+        return objects.getMember().addRole(roleFlake).doOnError(throwable -> objects
+                .setAdditionalMessage("Error setting team role, please contact a Mod to do so. "))
+                .thenReturn(objects);
     }
 
     @NotNull
-    private Mono<FlowObject> addUserToContext(FlowObject flow) {
+    static Mono<FlowObject> addUserToContext(FlowObject flow) {
         Message message = flow.getMessage();
         Snowflake guildId = message.getGuildId().orElseThrow();
         GatewayDiscordClient client = message.getClient();
@@ -120,7 +120,7 @@ public class AcceptTeamRequestCommand implements EventListener<ReactionAddEvent>
     }
 
 
-    private boolean getReactionWasByMentionedUserPredicate(FlowObject flow) {
+    static boolean getReactionWasByMentionedUserPredicate(FlowObject flow) {
         var embed = flow.getMessage().getEmbeds().stream().findFirst().orElseThrow();
         var userInvitationField = embed
                 .getFields()
@@ -154,7 +154,7 @@ public class AcceptTeamRequestCommand implements EventListener<ReactionAddEvent>
     @AllArgsConstructor
     @Builder
     @Data
-    private static class FlowObject {
+    public static class FlowObject {
         ReactionAddEvent event;
         Message message;
         Member member;
