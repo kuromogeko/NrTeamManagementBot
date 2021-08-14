@@ -17,22 +17,34 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CustomAuthenticationFilter extends GenericFilterBean {
     private final Cache<String, CustomDiscordUserPrincipal> cache;
+    private final DiscordOauthClient client;
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
 
-        String user = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (cache.containsKey(user)) {
-            var principal = cache.get(user);
-            CustomAuthentication authentication = new CustomAuthentication(principal);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        String auth = request.getHeader(HttpHeaders.AUTHORIZATION);
+        CustomDiscordUserPrincipal principal = null;
+        if (cache.containsKey(auth)) {
+            principal = cache.get(auth);
+        } else {
+            principal = loadCustomDiscordUserPrincipal(response, auth);
+            cache.put(auth, principal);
         }
-        //TODO Discord Oauth2/@me call
+        CustomAuthentication authentication = new CustomAuthentication(principal);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        //TODO On not authenticated be very unhappy
         chain.doFilter(request, response);
+    }
 
+    private CustomDiscordUserPrincipal loadCustomDiscordUserPrincipal(HttpServletResponse response, String auth) throws IOException {
+        CustomDiscordUserPrincipal principal = null;
+        try {
+            principal = client.getDiscordPrincipal(auth);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token could not be validated");
+        }
+        return principal;
     }
 }

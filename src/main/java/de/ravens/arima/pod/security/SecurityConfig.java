@@ -12,12 +12,13 @@ import org.springframework.security.web.session.ConcurrentSessionFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final Cache<String, CustomDiscordUserPrincipal> cache;
+    private final DiscordOauthClient client;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-            .addFilterAfter(new CustomAuthenticationFilter(cache), ConcurrentSessionFilter.class)
+            .addFilterAfter(new CustomAuthenticationFilter(cache, client), ConcurrentSessionFilter.class)
             .requestMatchers()
             .antMatchers("/**")
             .and()

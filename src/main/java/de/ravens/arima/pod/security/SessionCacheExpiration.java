@@ -12,7 +12,7 @@ public class SessionCacheExpiration implements ExpiryPolicy<String, CustomDiscor
 
     @Override
     public Duration getExpiryForCreation(String s, CustomDiscordUserPrincipal principal) {
-        DateTimeFormatter parser2 = ISODateTimeFormat.dateTimeNoMillis();
+        DateTimeFormatter parser2 = ISODateTimeFormat.dateTime();
         return Duration.between(Instant.now(), Instant.ofEpochMilli(parser2.parseDateTime(principal.getExpires()).getMillis()));
     }
 
