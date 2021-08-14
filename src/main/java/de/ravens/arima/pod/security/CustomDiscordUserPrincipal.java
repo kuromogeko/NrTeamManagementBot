@@ -12,6 +12,7 @@ import java.util.List;
 @ToString
 public class CustomDiscordUserPrincipal  implements Principal {
     private final List<String> scopes;
+    private final String token;
     private final String name;
     private final String expires;
 }

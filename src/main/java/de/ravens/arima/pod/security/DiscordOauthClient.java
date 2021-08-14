@@ -24,7 +24,8 @@ public class DiscordOauthClient {
     public CustomDiscordUserPrincipal getDiscordPrincipal(String auth) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>("", headers);
-        headers.setBearerAuth(auth.replace("Bearer ", ""));
+        String token = auth.replace("Bearer ", "");
+        headers.setBearerAuth(token);
         var response = restTemplate.exchange(oauth2Url, HttpMethod.GET, entity, String.class);
         if (!response.getStatusCode().is2xxSuccessful()) {
             throw new RuntimeException("Discord did not respond with OK");
@@ -41,6 +42,7 @@ public class DiscordOauthClient {
                 .name(name.asText())
                 .expires(expires.asText())
                 .scopes(scopes)
+                .token(token)
                 .build();
     }
 }
