@@ -14,9 +14,11 @@ import java.util.List;
 @ToString
 @Document
 @DomainEntity
-public class ServerConfiguration {
+public class Team {
     @Id
     private String id;
-    private String serverId;
-    private List<String> roles;
+    private String name;
+    private String roleId;
+    private String guildId;
+    private List<TeamMember> members;
 }

@@ -2,12 +2,12 @@ package de.ravens.arima.pod.boundary.repo;
 
 
 import de.ravens.arima.pod.boundary.ddd.annotations.DomainRepository;
-import de.ravens.arima.pod.domain.entity.ServerConfiguration;
+import de.ravens.arima.pod.domain.entity.GuildSettings;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
 @DomainRepository
-public interface ServerConfigurationRepository extends MongoRepository<ServerConfiguration, String> {
-    List<ServerConfiguration> findByServerId(String serverId);
+public interface GuildSettingRepository extends MongoRepository<GuildSettings, String> {
+    List<GuildSettings> findByServerId(String serverId);
 }
