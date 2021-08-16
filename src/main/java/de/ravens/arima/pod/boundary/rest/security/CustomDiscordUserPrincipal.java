@@ -13,6 +13,7 @@ import java.util.List;
 public class CustomDiscordUserPrincipal  implements Principal {
     private final List<String> scopes;
     private final String token;
+    private final String discordId;
     private final String name;
     private final String expires;
 }

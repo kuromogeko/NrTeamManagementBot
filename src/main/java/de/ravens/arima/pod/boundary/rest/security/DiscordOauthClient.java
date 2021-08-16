@@ -32,6 +32,7 @@ public class DiscordOauthClient {
         }
         JsonNode root = mapper.readTree(response.getBody());
         JsonNode name = root.path("user").path("username");
+        JsonNode id = root.path("user").path("id");
         JsonNode expires = root.path("expires");
         var scopes = StreamSupport
                 .stream(root.withArray("scopes").spliterator(), false)
@@ -40,6 +41,7 @@ public class DiscordOauthClient {
 
         return CustomDiscordUserPrincipal.builder()
                 .name(name.asText())
+                .discordId(id.asText())
                 .expires(expires.asText())
                 .scopes(scopes)
                 .token(token)

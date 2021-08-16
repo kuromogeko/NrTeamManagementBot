@@ -1,5 +1,6 @@
 package de.ravens.arima.pod.boundary.rest.runtime;
 
+import de.ravens.arima.pod.application.dto.InfoDto;
 import de.ravens.arima.pod.boundary.rest.security.CustomDiscordUserPrincipal;
 import discord4j.core.GatewayDiscordClient;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,10 @@ public class RuntimeInformation {
     }
 
     @GetMapping("/api/cred")
-    public ResponseEntity<String> getCredInfo(@AuthenticationPrincipal CustomDiscordUserPrincipal principal) {
-        return ResponseEntity.ok(principal.getName()+principal.getScopes().toString());
+    public ResponseEntity<InfoDto> getCredInfo(@AuthenticationPrincipal CustomDiscordUserPrincipal principal) {
+        return ResponseEntity.ok(InfoDto.builder()
+                .name(principal.getName())
+                .scopes(principal.getScopes())
+                .discordId(principal.getDiscordId()).build());
     }
 }

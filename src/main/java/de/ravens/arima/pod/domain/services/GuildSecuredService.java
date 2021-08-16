@@ -20,7 +20,7 @@ public class GuildSecuredService {
      * @param member The member which made the call
      * @return wether access is granted
      */
-    public boolean mayAccessGuild(GuildSettings settings, Member member){
+    private boolean mayAccessGuild(GuildSettings settings, Member member){
         if(!settingsMatchMember(settings, member)){
             throw new RuntimeException("Wrong member given for settings");
         }
@@ -49,7 +49,7 @@ public class GuildSecuredService {
                 .orElse(false);
     }
 
-    public boolean guildMatchesGuildSetting(GuildSettings settings, Guild guild){
+    private boolean guildMatchesGuildSetting(GuildSettings settings, Guild guild){
         return settings.getServerId().equals(guild.getId().asString());
     }
 
@@ -70,10 +70,19 @@ public class GuildSecuredService {
         return new GuildSettings(serverId, List.of());
     }
 
-    public boolean userIsInGuild(String guildId, User user){
+    private boolean userIsInGuild(String guildId, User user){
         return user.asMember(Snowflake.of(guildId)).blockOptional().isPresent();
     }
 
-    //TODO full combined permissioncheck starting with user (and guild?) and guildid
+    public boolean mayAccessFunction(GuildSettings settings, Guild guild, User user){
+        if(!guildMatchesGuildSetting(settings, guild)){
+            return false;
+        }
+        var member = user.asMember(Snowflake.of(settings.getServerId())).blockOptional().orElseThrow();
+        if(!settingsMatchMember(settings, member)){
+            return false;
+        }
+        return mayAccessGuild(settings, member);
+    }
 
 }
