@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(originPatterns = "*")
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 public class TeamController {
     private final GatewayDiscordClient client;
     private final AppTeamService teamService;

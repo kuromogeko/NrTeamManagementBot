@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(originPatterns = "*")
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 public class RuntimeInformation {
     private final GatewayDiscordClient client;
 
