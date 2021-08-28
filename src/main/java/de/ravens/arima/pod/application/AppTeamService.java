@@ -12,6 +12,8 @@ import discord4j.core.GatewayDiscordClient;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @ApplicationService
 @AllArgsConstructor
@@ -35,7 +37,19 @@ public class AppTeamService {
             throw new RuntimeException("No access allowed");
         }
         var team = teamService.addTeam(teamDto.getName(), teamDto.getRoleId(), guild);
+        var id = getFreeId();
+        team.setId(id.toString());
         teamRepository.save(team);
         return TeamDto.mapFromTeam(team);
+    }
+
+    private UUID getFreeId() {
+        UUID uuid = null;
+        var freeIdFound = false;
+        while(!freeIdFound){
+            uuid = UUID.randomUUID();
+            freeIdFound = teamRepository.findById(uuid.toString()).isEmpty();
+        }
+        return uuid;
     }
 }

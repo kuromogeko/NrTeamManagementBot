@@ -25,10 +25,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .addFilterAfter(new CustomAuthenticationFilter(cache, client), ConcurrentSessionFilter.class)
             .requestMatchers()
-            .antMatchers("/**")
+            .antMatchers("/api/**")
             .and()
                 .authorizeRequests()
-                .anyRequest().authenticated()
+                .antMatchers("/api/**")
+                .authenticated()
             .and()
                 .cors()
         .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());

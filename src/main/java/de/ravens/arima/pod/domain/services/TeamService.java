@@ -15,7 +15,6 @@ public class TeamService {
     //TODO Delete
 
     public Team addTeam(String name, String roleId, Guild guild){
-
         Team team = new Team(null, name, roleId, guild.getId().asString(), List.of());
         if(!roleMatchesGuild(guild, roleId)){
             throw new RuntimeException("Role not found in Guild");
