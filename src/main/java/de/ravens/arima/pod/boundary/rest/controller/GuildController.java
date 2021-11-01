@@ -41,8 +41,7 @@ public class GuildController {
     }
 
     @GetMapping(path = "/api/guilds/{guildId}")
-    public ResponseEntity<?> getMembers(@AuthenticationPrincipal CustomDiscordUserPrincipal principal,
-                                        @PathVariable String guildId) {
+    public ResponseEntity<?> getMembers(@PathVariable String guildId) {
         try {
             return ResponseEntity.ok(this.guildUseCase.getGuildMembers(Snowflake.of(guildId)));
         } catch (GuildException e) {
