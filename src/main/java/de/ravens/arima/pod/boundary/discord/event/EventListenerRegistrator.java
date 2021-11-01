@@ -1,4 +1,4 @@
-package de.ravens.arima.pod.application.event;
+package de.ravens.arima.pod.boundary.discord.event;
 
 import de.ravens.arima.pod.boundary.ddd.annotations.ApplicationService;
 import discord4j.core.GatewayDiscordClient;

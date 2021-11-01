@@ -1,7 +1,5 @@
-package de.ravens.arima.pod.boundary.rest.team;
+package de.ravens.arima.pod.boundary.rest.controller;
 
-import de.ravens.arima.pod.application.AppTeamService;
-import de.ravens.arima.pod.application.dto.TeamDto;
 import de.ravens.arima.pod.boundary.rest.security.CustomDiscordUserPrincipal;
 import discord4j.core.GatewayDiscordClient;
 import lombok.AllArgsConstructor;
@@ -15,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(originPatterns = "*", allowCredentials = "true")
 public class TeamController {
     private final GatewayDiscordClient client;
-    private final AppTeamService teamService;
+//    private final AppTeamService teamService;
 
     @PostMapping(path = "api/guilds/{guildId}/teams")
-    public ResponseEntity<TeamDto> postTeam(@RequestBody TeamDto teamDto,
-                                            @AuthenticationPrincipal CustomDiscordUserPrincipal principal,
-                                            @PathVariable String guildId){
-        return ResponseEntity.status(HttpStatus.CREATED).body(teamService.addTeam(guildId, teamDto, client, principal));
+    public ResponseEntity<Object> postTeam(@RequestBody Object teamDto,
+                                           @AuthenticationPrincipal CustomDiscordUserPrincipal principal,
+                                           @PathVariable String guildId) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 }

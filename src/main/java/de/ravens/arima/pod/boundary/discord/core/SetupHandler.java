@@ -1,7 +1,7 @@
 package de.ravens.arima.pod.boundary.discord.core;
 
-import de.ravens.arima.pod.application.event.EventListener;
-import de.ravens.arima.pod.application.event.EventListenerRegistrator;
+import de.ravens.arima.pod.boundary.discord.event.EventListener;
+import de.ravens.arima.pod.boundary.discord.event.EventListenerRegistrator;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.Event;
